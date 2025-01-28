@@ -1,0 +1,138 @@
+<div class="row">
+    <div class="mt-2 col-md-12">
+    <p>
+        In this scenario, we aim to measure how much the models' predictions change against increasing amounts of adversarial manipulations, assuming the attacker knows the features used and the model itself and has unrestricted access to it. A feature-space evasion attack will be performed on test applications, perturbing the feature vector with constraints to ensure that applying these manipulations to an APK preserves its malicious functionalities. The applied perturbation is bounded based on the number of modified features.
+    </p>
+    </div>
+</div>
+
+<div class="tg-wrap">
+    <table class="tg" style="width: 100%;">
+        <thead>
+            <tr style="border-bottom: 1px solid black;">
+                <th class="tg-tb-center">Method</th>
+                <th class="tg-tb-center" id="FPR">False Positive Rate<span id="fpr-filter-img" class="filter-symbol-track-1">&#x25B2;</span></th>
+                <th class="tg-tb-center" id="DR_clean">Detection rate (clean)<span id="dr-clean-filter-img" class="filter-symbol-track-1">&#x25B2;</span></th>
+                <th class="tg-tb-center" id="DR_25">Detection rate (25 manipulated features)<span id="dr-25-filter-img" class="filter-symbol-track-1">&#x25B2;</span></th>
+                <th class="tg-tb-center" id="DR_50">Detection rate (50 manipulated features)<span id="dr-50-filter-img" class="filter-symbol-track-1">&#x25B2;</span></th>
+                <th class="tg-tb-center" id="DR_100">Detection rate (100 manipulated features)<span id="dr-100-filter-img" class="filter-symbol-track-1">&#x25B2;</span></th>
+            </tr>
+        </thead>
+        <tbody class="benchmark-track-1"></tbody>
+    </table>
+</div>
+
+<nav aria-label="Table Pagination" class="mt-2">
+    <ul class="pagination pagination-track-1 justify-content-end">
+        <!-- Pagination links will be dynamically generated here -->
+    </ul>
+</nav>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            processEscapes: true
+        }
+    });
+</script>
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+
+<script>
+    $(function () {
+        // Funzione per rielaborare MathJax dopo ogni modifica del DOM
+        function renderMathJax() {
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        }
+
+        var sortOrdersTrack1 = {
+            "FPR": false,
+            "DR_clean": false,
+            "DR_25": false,
+            "DR_50": false,
+            "DR_100": true
+        };
+        var pageSizeTrack1 = 15; // Number of rows per page
+        var currentPageTrack1 = 1; // Current page
+        var totalPagesTrack1 = 1; // Total number of pages
+        var jsonDataTrack1; // Store the JSON data
+
+        // Function to load JSON data and populate the table
+        function loadDataTrack1(jsonFile) {
+            $.getJSON(jsonFile, function(data) {
+                jsonDataTrack1 = data;
+                totalPagesTrack1 = Math.ceil(jsonDataTrack1.length / pageSizeTrack1);
+                sortTableTrack1("DR_100");
+                populateTableTrack1();
+                renderPaginationTrack1();
+                renderMathJax();  // Rielabora MathJax dopo il caricamento dei dati
+            });
+        }
+
+        // Load data from default JSON file on page load
+        loadDataTrack1("assets/data/track_1_results.json"");
+
+        // Function to populate the table with data for the current page
+        function populateTableTrack1() {
+            var startIndex = (currentPageTrack1 - 1) * pageSizeTrack1;
+            var endIndex = Math.min(startIndex + pageSizeTrack1, jsonDataTrack1.length);
+            var pageData = jsonDataTrack1.slice(startIndex, endIndex);
+            $(".benchmark-track-1").empty();
+            var altStyle = false;
+            $.each(pageData, function(index, item) {
+                var row = $("<tr>");
+                row.append($("<td>").addClass(altStyle ? "tg-30first method" : "tg-30second method").text(item.method));
+                row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").text(parseFloat(item.FPR.toPrecision(5))));
+                row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").text(parseFloat(item.DR_clean.toPrecision(5))));
+                row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").text(parseFloat(item.DR_25.toPrecision(5))));
+                row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").text(parseFloat(item.DR_50.toPrecision(5))));
+                row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").text(parseFloat(item.DR_100.toPrecision(5))));
+
+                $(".benchmark-track-1").append(row);
+                altStyle = !altStyle;
+            });
+        }
+
+        // Function to render pagination links
+        function renderPaginationTrack1() {
+            var paginationContainer = $(".pagination-track-1");
+            paginationContainer.empty();
+            for (var i = 1; i <= totalPagesTrack1; i++) {
+                var pageLink = $("<li>").addClass("page-item").append($("<a>").addClass("page-link").attr("href", "#").text(i));
+                if (i === currentPageTrack1) {
+                    pageLink.addClass("active");
+                }
+                paginationContainer.append(pageLink);
+            }
+        }
+
+        // Event listener for pagination links
+        $(".pagination-track-1").on("click", ".page-link", function(event) {
+            event.preventDefault();
+            currentPageTrack1 = parseInt($(this).text());
+            populateTableTrack1();
+            renderPaginationTrack1();
+        });
+
+        $(".tg-tb-center").click(function() {
+            var columnName = $(this).attr("id");
+            sortTableTrack1(columnName);
+            sortOrdersTrack1[columnName] = !sortOrdersTrack1[columnName];
+            populateTableTrack1();
+
+            var filterSymbol = $(this).find(".filter-symbol-track-1");
+            filterSymbol.html(sortOrdersTrack1[columnName] ? "&#x25BC;": "&#x25B2;");
+            renderPaginationTrack1();
+        });
+
+        // Function to sort table by column
+        function sortTableTrack1(columnName) {
+            jsonDataTrack1.sort(function(rowA, rowB) {
+                var cellA = parseFloat(rowA[columnName]);
+                var cellB = parseFloat(rowB[columnName]);
+                return sortOrdersTrack1[columnName] ? cellA - cellB : cellB - cellA;
+            });
+        }
+    });
+</script>

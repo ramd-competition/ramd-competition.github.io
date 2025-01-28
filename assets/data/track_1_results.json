@@ -1,0 +1,1 @@
+[{"method": "Baseline - SecSVM", "FPR": 0.0044, "DR_clean": 0.7536, "DR_25": 0.1496, "DR_50": 0.1064, "DR_100": 0.0544}, {"method": "Baseline - DREBIN", "FPR": 0.0036, "DR_clean": 0.7728, "DR_25": 0.0048, "DR_50": 0.0008, "DR_100": 0.0}]
