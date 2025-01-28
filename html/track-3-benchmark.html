@@ -1,0 +1,124 @@
+<div class="row">
+    <div class="mt-2 col-md-12">
+    <p>
+        In this setting, we will collect the performance evaluation of the given AI-based detectors with respect to (future) data collected over time, updating the test applications with new samples in each evaluation round.
+    </p>
+    </div>
+</div>
+
+<div class="tg-wrap">
+    <table class="tg" style="width: 100%;">
+        <thead>
+            <tr style="border-bottom: 1px solid black;">
+                <th class="tg-tb-center">Method</th>
+                <th class="tg-tb-center" id="AUT">Area Under Time - F1 score<span id="aut-clean-filter-img" class="filter-symbol-track-3">&#x25B2;</span></th>
+            </tr>
+        </thead>
+        <tbody class="benchmark-track-3"></tbody>
+    </table>
+</div>
+
+<nav aria-label="Table Pagination" class="mt-2">
+    <ul class="pagination pagination-track-3 justify-content-end">
+        <!-- Pagination links will be dynamically generated here -->
+    </ul>
+</nav>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            processEscapes: true
+        }
+    });
+</script>
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    $(function () {
+        // Funzione per rielaborare MathJax dopo ogni modifica del DOM
+        function renderMathJax() {
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        }
+
+        var sortOrdersTrack3 = {
+            "AUT": true
+        };
+        var pageSizeTrack3 = 15; // Number of rows per page
+        var currentPageTrack3 = 1; // Current page
+        var totalPagesTrack3 = 1; // Total number of pages
+        var jsonDataTrack3; // Store the JSON data
+
+        // Function to load JSON data and populate the table
+        function loadDataTrack3(jsonFile) {
+            $.getJSON(jsonFile, function(data) {
+                jsonDataTrack3 = data;
+                totalPagesTrack3 = Math.ceil(jsonDataTrack3.length / pageSizeTrack3);
+                sortTableTrack3("AUT");
+                populateTableTrack3();
+                renderPaginationTrack3();
+                renderMathJax();  // Rielabora MathJax dopo il caricamento dei dati
+            });
+        }
+
+        // Load data from default JSON file on page load
+        loadDataTrack3("assets/data/track_3_results.json");
+
+        // Function to populate the table with data for the current page
+        function populateTableTrack3() {
+            var startIndex = (currentPageTrack3 - 1) * pageSizeTrack3;
+            var endIndex = Math.min(startIndex + pageSizeTrack3, jsonDataTrack3.length);
+            var pageData = jsonDataTrack3.slice(startIndex, endIndex);
+            $(".benchmark-track-3").empty();
+            var altStyle = false;
+            $.each(pageData, function(index, item) {
+                var row = $("<tr>");
+                row.append($("<td>").addClass(altStyle ? "tg-30first method" : "tg-30second method").text(item.method));
+                row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").text(parseFloat(item.AUT.toPrecision(5))));
+
+                $(".benchmark-track-3").append(row);
+                altStyle = !altStyle;
+            });
+        }
+
+        // Function to render pagination links
+        function renderPaginationTrack3() {
+            var paginationContainer = $(".pagination-track-3");
+            paginationContainer.empty();
+            for (var i = 1; i <= totalPagesTrack3; i++) {
+                var pageLink = $("<li>").addClass("page-item").append($("<a>").addClass("page-link").attr("href", "#").text(i));
+                if (i === currentPageTrack3) {
+                    pageLink.addClass("active");
+                }
+                paginationContainer.append(pageLink);
+            }
+        }
+
+        // Event listener for pagination links
+        $(".pagination-track-3").on("click", ".page-link", function(event) {
+            event.preventDefault();
+            currentPageTrack3 = parseInt($(this).text());
+            populateTableTrack3();
+            renderPaginationTrack3();
+        });
+
+        $(".tg-tb-center").click(function() {
+            var columnName = $(this).attr("id");
+            sortTableTrack3(columnName);
+            sortOrdersTrack3[columnName] = !sortOrdersTrack3[columnName];
+            populateTableTrack3();
+
+            var filterSymbol = $(this).find(".filter-symbol-track-3");
+            filterSymbol.html(sortOrdersTrack3[columnName] ? "&#x25BC;": "&#x25B2;");
+            renderPaginationTrack3();
+        });
+
+        // Function to sort table by column
+        function sortTableTrack3(columnName) {
+            jsonDataTrack3.sort(function(rowA, rowB) {
+                var cellA = parseFloat(rowA[columnName]);
+                var cellB = parseFloat(rowB[columnName]);
+                return sortOrdersTrack3[columnName] ? cellA - cellB : cellB - cellA;
+            });
+        }
+    });
+</script>

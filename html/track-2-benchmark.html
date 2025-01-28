@@ -1,0 +1,130 @@
+<div class="row">
+    <div class="mt-2 col-md-12">
+    <p>
+        The problem-space attack scenario consists of manipulating the APK files directly rather than only simulating the effect of the attack at the feature level. In this case, we assume the attacker does not know the target model and its features. An input-space evasion attack will be performed on the test applications, applying functionality-preserving manipulation to the APKs. The applied manipulations are bounded based on the size of the injected data.
+    </p>
+    </div>
+</div>
+
+<div class="tg-wrap">
+    <table class="tg" style="width: 100%;">
+        <thead>
+            <tr style="border-bottom: 1px solid black;">
+                <th class="tg-tb-center">Method</th>
+                <th class="tg-tb-center" id="FPR">False Positive Rate<span id="fpr-filter-img" class="filter-symbol-track-2">&#x25B2;</span></th>
+                <th class="tg-tb-center" id="DR_clean">Detection rate (clean)<span id="dr-clean-filter-img" class="filter-symbol-track-2">&#x25B2;</span></th>
+                <th class="tg-tb-center" id="DR_100">Detection rate (100 manipulated features)<span id="dr-100-filter-img" class="filter-symbol-track-2">&#x25B2;</span></th>
+            </tr>
+        </thead>
+        <tbody class="benchmark-track-2"></tbody>
+    </table>
+</div>
+
+<nav aria-label="Table Pagination" class="mt-2">
+    <ul class="pagination pagination-track-2 justify-content-end">
+        <!-- Pagination links will be dynamically generated here -->
+    </ul>
+</nav>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            processEscapes: true
+        }
+    });
+</script>
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    $(function () {
+        // Funzione per rielaborare MathJax dopo ogni modifica del DOM
+        function renderMathJax() {
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        }
+
+        var sortOrdersTrack2 = {
+            "FPR": false,
+            "DR_clean": false,
+            "DR_100": true
+        };
+        var pageSizeTrack2 = 15; // Number of rows per page
+        var currentPageTrack2 = 1; // Current page
+        var totalPagesTrack2 = 1; // Total number of pages
+        var jsonDataTrack2; // Store the JSON data
+
+        // Function to load JSON data and populate the table
+        function loadDataTrack2(jsonFile) {
+            $.getJSON(jsonFile, function(data) {
+                jsonDataTrack2 = data;
+                totalPagesTrack2 = Math.ceil(jsonDataTrack2.length / pageSizeTrack2);
+                sortTableTrack2("DR_100");
+                populateTableTrack2();
+                renderPaginationTrack2();
+                renderMathJax();  // Rielabora MathJax dopo il caricamento dei dati
+            });
+        }
+
+        // Load data from default JSON file on page load
+        loadDataTrack2("assets/data/track_2_results.json");
+
+        // Function to populate the table with data for the current page
+        function populateTableTrack2() {
+            var startIndex = (currentPageTrack2 - 1) * pageSizeTrack2;
+            var endIndex = Math.min(startIndex + pageSizeTrack2, jsonDataTrack2.length);
+            var pageData = jsonDataTrack2.slice(startIndex, endIndex);
+            $(".benchmark-track-2").empty();
+            var altStyle = false;
+            $.each(pageData, function(index, item) {
+                var row = $("<tr>");
+                row.append($("<td>").addClass(altStyle ? "tg-30first method" : "tg-30second method").text(item.method));
+                row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").text(parseFloat(item.FPR.toPrecision(5))));
+                row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").text(parseFloat(item.DR_clean.toPrecision(5))));
+                row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").text(parseFloat(item.DR_100.toPrecision(5))));
+
+                $(".benchmark-track-2").append(row);
+                altStyle = !altStyle;
+            });
+        }
+
+        // Function to render pagination links
+        function renderPaginationTrack2() {
+            var paginationContainer = $(".pagination-track-2");
+            paginationContainer.empty();
+            for (var i = 1; i <= totalPagesTrack2; i++) {
+                var pageLink = $("<li>").addClass("page-item").append($("<a>").addClass("page-link").attr("href", "#").text(i));
+                if (i === currentPageTrack2) {
+                    pageLink.addClass("active");
+                }
+                paginationContainer.append(pageLink);
+            }
+        }
+
+        // Event listener for pagination links
+        $(".pagination-track-2").on("click", ".page-link", function(event) {
+            event.preventDefault();
+            currentPageTrack2 = parseInt($(this).text());
+            populateTableTrack2();
+            renderPaginationTrack2();
+        });
+
+        $(".tg-tb-center").click(function() {
+            var columnName = $(this).attr("id");
+            sortTableTrack2(columnName);
+            sortOrdersTrack2[columnName] = !sortOrdersTrack2[columnName];
+            populateTableTrack2();
+
+            var filterSymbol = $(this).find(".filter-symbol-track-2");
+            filterSymbol.html(sortOrdersTrack2[columnName] ? "&#x25BC;": "&#x25B2;");
+            renderPaginationTrack2();
+        });
+
+        // Function to sort table by column
+        function sortTableTrack2(columnName) {
+            jsonDataTrack2.sort(function(rowA, rowB) {
+                var cellA = parseFloat(rowA[columnName]);
+                var cellB = parseFloat(rowB[columnName]);
+                return sortOrdersTrack2[columnName] ? cellA - cellB : cellB - cellA;
+            });
+        }
+    });
+</script>
