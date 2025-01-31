@@ -1,3 +1,6 @@
+* {
+  caret-color: transparent;
+}
 
 canvas {
     position: fixed;
