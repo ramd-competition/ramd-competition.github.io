@@ -1,7 +1,8 @@
 <div class="row">
     <div class="mt-2 col-md-12">
     <p>
-        The problem-space attack scenario consists of manipulating the APK files directly rather than only simulating the effect of the attack at the feature level. In this case, we assume the attacker does not know the target model and its features. An input-space evasion attack will be performed on the test applications, applying functionality-preserving manipulation to the APKs. The applied manipulations are bounded based on the size of the injected data.
+        The problem-space attack scenario consists of manipulating the APK files directly rather than only simulating the effect of the attack at the feature level. In this case, we assume the attacker does not know the target model and its features. An input-space evasion attack will be performed on the test applications, applying functionality-preserving manipulation to the APKs. The applied perturbation is bounded based on the number of modified features. <br>
+        The winner will be the one with the highest Detection Rate when 100 features are manipulated. If multiple participants report the same score, the other metrics will be considered in this order to determine the winner: Detection Rate in the absence of manipulation, False Positive Rate.
     </p>
     </div>
 </div>
