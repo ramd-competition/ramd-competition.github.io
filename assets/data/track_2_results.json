@@ -1,1 +1,1 @@
-[{"method": "Baseline - DREBIN", "FPR": 0.0036, "DR_clean": 0.7728, "DR_100": 0.0424}]
+[{"method": "Baseline - DREBIN", "FPR": 0.0036, "DR_clean": 0.7728, "DR_100": 0.0376}, {"method": "SVM-CB (b0.2, n100)", "FPR": 0.0082, "DR_clean": 0.7536, "DR_100": 0.0488}, {"method": "Continual-Positive Congruent Training", "FPR": 0.004, "DR_clean": 0.592, "DR_100": 0.3584}, {"method": "Baseline - SecSVM", "FPR": 0.0044, "DR_clean": 0.7536, "DR_100": 0.1168}]
