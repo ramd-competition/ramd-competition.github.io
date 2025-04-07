@@ -59,6 +59,7 @@
                 jsonDataTrack2 = data;
                 totalPagesTrack2 = Math.ceil(jsonDataTrack2.length / pageSizeTrack2);
                 sortTableTrack2("DR_100");
+                
                 populateTableTrack2();
                 renderPaginationTrack2();
                 renderMathJax();  // Rielabora MathJax dopo il caricamento dei dati
@@ -76,11 +77,11 @@
             $(".benchmark-track-2").empty();
             var altStyle = false;
             $.each(pageData, function(index, item) {
-                var row = $("<tr>");
-                row.append($("<td>").addClass(altStyle ? "tg-30first method" : "tg-30second method").text(item.method));
-                row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").text(parseFloat(item.FPR.toPrecision(5))));
-                row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").text(parseFloat(item.DR_clean.toPrecision(5))));
-                row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").text(parseFloat(item.DR_100.toPrecision(5))));
+    		var row = $("<tr>");
+    		row.append($("<td>").addClass(altStyle ? "tg-30first method" : "tg-30second method").html(index === 0 ? "<strong>" + item.method + "</strong>" : item.method));
+    		row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").html(index === 0 ? "<strong>" + parseFloat(item.FPR.toPrecision(5)) + "</strong>" : parseFloat(item.FPR.toPrecision(5))));
+    		row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").html(index === 0 ? "<strong>" + parseFloat(item.DR_clean.toPrecision(5)) + "</strong>" : parseFloat(item.DR_clean.toPrecision(5))));
+    		row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").html(index === 0 ? "<strong>" + parseFloat(item.DR_100.toPrecision(5)) + "</strong>" : parseFloat(item.DR_100.toPrecision
 
                 $(".benchmark-track-2").append(row);
                 altStyle = !altStyle;

@@ -81,12 +81,12 @@
             var altStyle = false;
             $.each(pageData, function(index, item) {
                 var row = $("<tr>");
-                row.append($("<td>").addClass(altStyle ? "tg-30first method" : "tg-30second method").text(item.method));
-                row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").text(parseFloat(item.FPR.toPrecision(5))));
-                row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").text(parseFloat(item.DR_clean.toPrecision(5))));
-                row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").text(parseFloat(item.DR_25.toPrecision(5))));
-                row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").text(parseFloat(item.DR_50.toPrecision(5))));
-                row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").text(parseFloat(item.DR_100.toPrecision(5))));
+	    	row.append($("<td>").addClass(altStyle ? "tg-30first method" : "tg-30second method").html(index === 0 ? "<strong>" + item.method + "</strong>" : item.method));
+	    	row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").html(index === 0 ? "<strong>" + parseFloat(item.FPR.toPrecision(5)) + "</strong>" : parseFloat(item.FPR.toPrecision(5))));
+	    	row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").html(index === 0 ? "<strong>" + parseFloat(item.DR_clean.toPrecision(5)) + "</strong>" : parseFloat(item.DR_clean.toPrecision(5))));
+	    	row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").html(index === 0 ? "<strong>" + parseFloat(item.DR_25.toPrecision(5)) + "</strong>" : parseFloat(item.DR_25.toPrecision(5))));
+	    	row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").html(index === 0 ? "<strong>" + parseFloat(item.DR_50.toPrecision(5)) + "</strong>" : parseFloat(item.DR_50.toPrecision(5))));
+	    	row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").html(index === 0 ? "<strong>" + parseFloat(item.DR_100.toPrecision(5)) + "</strong>" : parseFloat(item.DR_100.toPrecision(5))));
 
                 $(".benchmark-track-1").append(row);
                 altStyle = !altStyle;

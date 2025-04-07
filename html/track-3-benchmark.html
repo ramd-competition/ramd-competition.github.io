@@ -55,6 +55,7 @@
                 jsonDataTrack3 = data;
                 totalPagesTrack3 = Math.ceil(jsonDataTrack3.length / pageSizeTrack3);
                 sortTableTrack3("AUT");
+                sortTableTrack3("AUT");
                 populateTableTrack3();
                 renderPaginationTrack3();
                 renderMathJax();  // Rielabora MathJax dopo il caricamento dei dati
@@ -73,9 +74,8 @@
             var altStyle = false;
             $.each(pageData, function(index, item) {
                 var row = $("<tr>");
-                row.append($("<td>").addClass(altStyle ? "tg-30first method" : "tg-30second method").text(item.method));
-                row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").text(parseFloat(item.AUT.toPrecision(5))));
-
+    		row.append($("<td>").addClass(altStyle ? "tg-30first method" : "tg-30second method").html(index === 0 ? "<strong>" + item.method + "</strong>" : item.method));
+    		row.append($("<td>").addClass(altStyle ? "tg-44first" : "tg-44second").html(index === 0 ? "<strong>" + parseFloat(item.AUT.toPrecision(5)) + "</strong>" : parseFloat(item.AUT.toPrecision(5))));
                 $(".benchmark-track-3").append(row);
                 altStyle = !altStyle;
             });
